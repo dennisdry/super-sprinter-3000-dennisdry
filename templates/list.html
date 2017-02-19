@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>List</title>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400&amp;subset=latin-ext" rel="stylesheet">
+</head>
+
+<body>
+
+    <h1><strong>User Story Manager</strong></h1>
+
+    <form action="{{ url_for('empty_user_story') }}" method=get>
+        <button type="submit">Add new User Story</button>
+    </form>
+
+
+    <table cellspacing="0" cellpadding="0">
+        <tr>
+            <th>ID</th>
+            <th>Story Title</th>
+            <th>User Story</th>
+            <th>Acceptance Criteria</th>
+            <th>Business Value</th>
+            <th>Estimation</th>
+            <th>Status</th>
+            <th><span class="small-text">Edit</span></th>
+            <th><span class="small-text">Delete</span></th>
+        </tr>
+
+
+        {% for story in user_entries %}
+
+        <tr>
+
+            <td>{{ story.id }}</td>
+            <td>{{ story.story_title }}</td>
+            <td>{{ story.user_story }}</td>
+            <td>{{ story.acceptance_criteria }}</td>
+            <td>{{ story.business_value }}</td>
+            <td>{{ story.estimation }}</td>
+            <td>{{ story.status }}</td>
+
+
+            <td><form action="/story/{{ story.id }}" method=post>
+                    <input type="hidden" id="id_for_update" name="id_for_update" value={{ story.id }} readonly>
+                    <button class="hidden-button" type="submit" id="pen" name="pen">
+                    <img src="static/pencil.svg">
+                    </button></td>
+            </form>
+
+            <td><form action="{{ url_for('delete_user_story') }}" method=post>
+                    <input type="hidden" id="id_for_delete" name="id_for_delete" value={{ story.id }} readonly>
+                    <button type="submit" class="hidden-button" id="delete" name="delete">
+                    <img src="static/delete.svg ">
+                    </button></td>
+            </form>
+
+        </tr>
+        {% endfor %}
+
+    </table>
+
+</body>
+<footer>
+</footer>
+
+</html>
