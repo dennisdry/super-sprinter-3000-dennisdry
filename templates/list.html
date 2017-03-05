@@ -1,70 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "layout.html" %}
+{% block title %}All Interviews{% endblock %}
+{% block content %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>List</title>
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400&amp;subset=latin-ext" rel="stylesheet">
-</head>
-
-<body>
-
-    <h1><strong>User Story Manager</strong></h1>
-
-    <form action="{{ url_for('empty_user_story') }}" method=get>
-        <button type="submit">Add new User Story</button>
-    </form>
-
-
-    <table cellspacing="0" cellpadding="0">
+    <h1>User Story Manager</h1>
+    <table id="storytable">
         <tr>
-            <th>ID</th>
+            <th>Id</th>
             <th>Story Title</th>
-            <th>User Story</th>
-            <th>Acceptance Criteria</th>
-            <th>Business Value</th>
+            <th>User story</th>
+            <th>Acceptance criteria</th>
+            <th>Business value</th>
             <th>Estimation</th>
             <th>Status</th>
-            <th><span class="small-text">Edit</span></th>
-            <th><span class="small-text">Delete</span></th>
+            <th>Edit</th>
+            <th>Delete</th>
         </tr>
+        {% for story in stories %}
+            <tr>
+                <td>{{ story.id }}</td>
+                <td>{{ story.story_title }}</td>
+                <td>{{ story.user_story }}</td>
+                <td>{{ story.acceptance_criteria }}</td>
+                <td>{{ story.business_value }}</td>
+                <td>{{ story.estimation }}</td>
+                <td>{{ story.status }}</td>
 
-
-        {% for story in user_entries %}
-
-        <tr>
-
-            <td>{{ story.id }}</td>
-            <td>{{ story.story_title }}</td>
-            <td>{{ story.user_story }}</td>
-            <td>{{ story.acceptance_criteria }}</td>
-            <td>{{ story.business_value }}</td>
-            <td>{{ story.estimation }}</td>
-            <td>{{ story.status }}</td>
-
-
-            <td><form action="/story/{{ story.id }}" method=post>
-                    <input type="hidden" id="id_for_update" name="id_for_update" value={{ story.id }} readonly>
-                    <button class="hidden-button" type="submit" id="pen" name="pen">
-                    <img src="static/pencil.svg">
-                    </button></td>
-            </form>
-
-            <td><form action="{{ url_for('delete_user_story') }}" method=post>
-                    <input type="hidden" id="id_for_delete" name="id_for_delete" value={{ story.id }} readonly>
-                    <button type="submit" class="hidden-button" id="delete" name="delete">
-                    <img src="static/delete.svg ">
-                    </button></td>
-            </form>
-
-        </tr>
+                <td id="edit">
+                    <a class="mybuttons" href="{{ url_for('get_story_for_edit', story_id = story.id) }}">
+                        <img src="{{ url_for('static', filename='img/pencil.svg') }}" alt="Edit Icon">
+                    </a>
+                </td>
+                <td id="delete">
+                    <a class="mybuttons" href="{{ url_for('delete_user_story', story_id = story.id) }}">
+                        <img src="{{ url_for('static', filename='img/delete.svg') }}" alt="Edit Icon">
+                    </a>
+                </td>
+            </tr>
         {% endfor %}
-
     </table>
-
-</body>
-<footer>
-</footer>
-
-</html>
+{% endblock %}

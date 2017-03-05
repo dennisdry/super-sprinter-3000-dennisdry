@@ -1,58 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Form</title>
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400&amp;subset=latin-ext" rel="stylesheet">
-    <title>Super Sprinter 3000 -{% if story is not none %} Edit Story{% else %} Add new Story{%endif %}</title>
-</head>
-
-<body>
-<h1><strong>
-    {% if add_user_story %}
-        <title>Super Sprinter 3000 - Add new Story</title>
-    {% else %}
-        <title>Super Sprinter 3000 - Edit Story</title>
-    {% endif %}
-</strong></h1>
-
-<form action="{{ url_for('add_user_story') }}" method="post">
-
-    <label for="story-title">Story title</label>
-    <textarea name="story-title" rows="1" cols="100">{% if story is not none %}{{ story.story_title }}{% else %}{%endif %}</textarea><br/><br/>
+{% extends "layout.html" %}
+{% block title %}All Interviews{% endblock %}
+{% block content %}
 
 
-    <label for="user-story">User Story</label>
-    <textarea name="user-story" rows="5" cols="100">{% if story is not none %}{{ story.user_story }}{% else %}{%endif %}</textarea><br/><br/>
+    <h1>{% if story %}User Story Management - Edit Story{% else %}User Story Management - Add New
+        Story{% endif %}</h1>
 
-    <label for="acceptance-criteria">Acceptance criteria</label>
-    <textarea name="acceptance-criteria" rows="5" cols="100">{% if story is not none %}{{ story.acceptance_criteria }}{% else %}{%endif %}</textarea><br/><br/>
+    <div class="form-wrapper">
 
-    <label for="business-value">Business Value</label>
-    <input type="number" name="business-value" min="100" max="1500" step="100" value={% if story is not none %}{{ story.business_value }}{% else %}{%endif %}><br/><br/>
+        <form  {% if story %} action="{{ url_for('edit_user_story', story_id = story.id) }}"{% else %}
+                              action=" {{ url_for('add_user_story') }}" {% endif %} method="post">
 
-    <label for="estimation">Estimation</label>
-    <input type="number" name="estimation" name="quantity" min="0.5" max="40" step="0.5" value={% if story is not none %}{{ story.estimation }}{% else %}{%endif %}><br/><br/>
+            <div class="input-group">
+                <label for="story_title">Story title</label>
+                <textarea required id="story_title" name="story_title">{% if story %}{{ story.story_title }}{% endif %}</textarea>
 
-    <label for="status">Status</label>
-    <select name="status">
-        <option value="planning" {% if story.status=="planning" %}selected="selected"{% endif %}>Planning</option>
-        <option value="to do" {% if story.status=="to do" %}selected="selected"{% endif %}>To Do</option>
-        <option value="in progress" {% if story.status=="in progress" %}selected="selected"{% endif %}>In Progress</option>
-        <option value="review" {% if story.status=="review" %}selected="selected"{% endif %}>Review</option>
-        <option value="done" {% if story.status=="done" %}selected="selected"{% endif %}>Done</option>
-    </select>
+                <label for="user_story">User Story</label>
+                <textarea required id="user_story" name="user_story">{% if story %}{{ story.user_story }}{% endif %}</textarea>
 
-    <br/><br/>
-    <input type="submit" {% if story is not none %}id=Update value=Update{% else %}id=Create value=Create{% endif %}>
+                <label for="acceptance_criteria">Acceptance criteria</label>
+                <textarea required id="acceptance_criteria" name="acceptance_criteria">{% if story %}{{ story.acceptance_criteria }}{% endif %}</textarea>
 
-</form>
-<footer>
+                <label for="business_value">Business Value</label>
+                <input id="business_value" type="number" name="business_value" min="100" max="1500" step="100"
+                       {% if story %}value="{{ story.business_value }}"{% else %}value="100"{% endif %} required>
 
-</footer>
+                <label for="estimation">Estimation</label>
+                <input id="estimation" type="number" name="estimation"  min="0.5" max="40" step="0.5"
+                       {% if story %}value="{{ story.estimation }}"{% else %}value="0.5"{% endif %}required>
 
-</body>
+                <label for="status">Status</label>
+                <select id="status" name="status" required>
+                    <option {% if story %}value="{{ story.status }}"{% endif %}>{% if story %}{{ story.status }}{% else %}{% endif %}</option>
+                    <option value="planning">planning</option>
+                    <option value="to-do">to-do</option>
+                    <option value="in-progress">in-progress</option>
+                    <option value="review">review</option>
+                    <option value="done">done</option>
+                </select>
 
-</html>
+
+                <div class="submit-wrapper">
+                    <input type="submit">
+                </div>
+
+            </div>
+
+        </form>
+    </div>
+
+{% endblock %}

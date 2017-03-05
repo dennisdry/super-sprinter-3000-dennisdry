@@ -16,10 +16,10 @@ class BaseModel(Model):
         database = CreateDatabase.create_db_object()
 
 
-class Entries(BaseModel):
+class Userstories(Model):
     story_title = CharField()
     user_story = CharField()
-    acceptance_criteria = CharField()
+    acceptance_criteria = TextField()
     business_value = IntegerField()
     estimation = FloatField()
     status = CharField()

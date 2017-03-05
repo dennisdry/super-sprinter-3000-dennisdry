@@ -5,74 +5,73 @@ from flask import Flask, request, g, redirect, url_for, \
 app = Flask(__name__)
 app.config.from_object(__name__)
 
+app = Flask(__name__)
+app.config.from_object(__name__)
+
+app.config.update(dict(
+    DEBUG=True, SECRET_KEY='any_random_string'))
+
 
 def init_db():
     db = CreateDatabase.create_db_object()
     db.connect()
-    db.create_tables([Entries], safe=True)
+    db.create_tables([Userstories], safe=True)
 
 
 @app.teardown_appcontext
 def close_db(error):
-    if hasattr(g, 'postgre_db'):
+    if hasattr(g, 'dry'):
         g.postgre_db.close()
 
 
 @app.route('/')
 def show_entries():
-    entries_query = Entries.select().order_by(Entries.id)
-    return render_template('list.html', user_entries=entries_query)
+    stories = Userstories.select().order_by(Userstories.id.asc())
+
+    return render_template('list.html', stories=stories)
 
 
-@app.route('/story')
+@app.route('/empty_story')
 def empty_user_story():
     return render_template('form.html', story=None)
 
 
 @app.route('/add_user_story', methods=['POST'])
 def add_user_story():
-    new_user_story = Entries.create(story_title=request.form["story-title"],
-                                    user_story=request.form["user-story"],
-                                    acceptance_criteria=request.form["acceptance-criteria"],
-                                    business_value=request.form["business-value"],
-                                    estimation=request.form["estimation"],
-                                    status=request.form["status"])
-    new_user_story.save()
-    return redirect('/')
-
-@app.route('/delete', methods=['POST'])
-def delete_user_story():
-    story_id = request.form["id_for_delete"]
-    selected_story = Entries.get(Entries.id == story_id)
-    selected_story.delete_instance()
+    new_entry = Userstories.create(story_title=request.form['story_title'],
+                                   user_story=request.form['user_story'],
+                                   acceptance_criteria=request.form['acceptance_criteria'],
+                                   business_value=request.form['business_value'],
+                                   estimation=request.form['estimation'],
+                                   status=request.form['status'])
+    new_entry.save()
     return redirect('/')
 
 
+@app.route('/story/<int:story_id>', methods=['GET'])
+def get_story_for_edit(story_id):
+    story = Userstories.select().where(Userstories.id == story_id).get()
+    return render_template('form.html', story=story)
 
 
-
-
-
-@app.route('/story/<story_id>', methods=['POST'])
-def get_user_story(story_id):
-    story_id = request.form["id_for_update"]
-    selected_story = Entries.get(Entries.id == story_id)
-    return render_template('form.html', story=selected_story)
-
-
-@app.route('/update', methods=['POST'])
-def update_user_story():
-    story_for_update = Entries.update(title=request.form["story-title"],
-                                        story=request.form["user-story"],
-                                        criteria=request.form["acceptance-criteria"],
-                                        value=request.form["business-value"],
-                                        estimation=request.form["estimation"],
-                                        status=request.form["status"]).where(Entries.id == request.form["id"])
+@app.route('/story/<int:story_id>', methods=['POST'])
+def edit_user_story(story_id):
+    story_for_update = Userstories.update(story_title=request.form['story_title'],
+                                          user_story=request.form['user_story'],
+                                          acceptance_criteria=request.form['acceptance_criteria'],
+                                          business_value=request.form['business_value'],
+                                          estimation=request.form['estimation'],
+                                          status=request.form['status']).where(Userstories.id == story_id)
     story_for_update.execute()
     return redirect('/')
 
 
+@app.route('/delete/<int:story_id>')
+def delete_user_story(story_id):
+    story = Userstories.get(Userstories.id == story_id)
+    story.delete_instance()
 
+    return redirect('/')
 
 
 if __name__ == "__main__":

@@ -1,0 +1,48 @@
+/***********TABLE STYLE************/
+
+#caption {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+}
+
+table {
+    width: 100%;
+
+}
+
+table td {
+    border: solid 1px;
+
+}
+
+.shortvalues {
+    text-align: center;
+}
+
+.longvalues {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    border-collapse: collapse;
+}
+
+/****BUTTON STYLE***/
+
+.mybuttons {
+
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    border: none;
+}
+
+#delete {
+    border: none;
+}
+
+#edit {
+    border: none;
+}
+
+
+
