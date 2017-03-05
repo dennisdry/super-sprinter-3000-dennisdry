@@ -8,7 +8,7 @@
       <case-sensitivity plain-identifiers="lower" quoted-identifiers="exact" />
       <secret-storage>master_key</secret-storage>
       <user-name>dry</user-name>
-      <resolve-scope>dry:public,dry</resolve-scope>
+      <resolve-scope>dry:dry,public</resolve-scope>
     </data-source>
   </component>
 </project>

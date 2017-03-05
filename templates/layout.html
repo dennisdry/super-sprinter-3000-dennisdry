@@ -11,11 +11,18 @@
 
 <nav class="navigator navbar navbar-default navbar-fixed-top">
     <div class="container">
-        <div class="button-wrapper">
+        <div class="row"></div>
+         <div class="button-wrapper col-lg-6">
+            <a class="userstory-button" href="{{ url_for('show_entries') }}">
+                <button>Home</button>
+            </a>
+        </div>
+        <div class="button-wrapper col-lg-6">
             <a class="userstory-button" href="{{ url_for('empty_user_story') }}">
                 <button>Add story</button>
             </a>
         </div>
+
     </div>
 </nav>
 
