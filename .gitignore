@@ -308,5 +308,11 @@ __pycache__/
 
 .idea
 
+peewee.db
+
+.db
+
+__pycache__
+
 
 
